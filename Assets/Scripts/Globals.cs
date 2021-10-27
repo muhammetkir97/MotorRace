@@ -7,6 +7,9 @@ public class Globals : MonoBehaviour
     public static Globals Instance;
 
     private float BoostTime = 5f;
+    private float CarSpeed = 10;
+    private int CarCount = 10;
+    private float CarSpacing = 50;
 
 
     void Awake()
@@ -28,5 +31,20 @@ public class Globals : MonoBehaviour
     public float GetBoostTime()
     {
         return BoostTime;
+    }
+
+    public float GetCarSpeed()
+    {
+        return CarSpeed;
+    }
+
+    public int GetCarCount()
+    {
+        return CarCount;
+    }
+
+    public float GetCarSpacing()
+    {
+        return CarSpacing;
     }
 }

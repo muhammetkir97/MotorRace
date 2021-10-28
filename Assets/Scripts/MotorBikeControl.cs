@@ -33,11 +33,14 @@ public class MotorBikeControl : MonoBehaviour
     private float AccelerationSmoothVel = 0;
 
     bool IsInitilaized = false;
+    bool IsMoving = false;
 
 
     private Rigidbody MotorRigidbody;
     private Transform BodyParent;
     private MotorModelController MotorModel;
+
+    [SerializeField] private GameObject[] RagdollComponents;
 
     void Start()
     {
@@ -46,6 +49,7 @@ public class MotorBikeControl : MonoBehaviour
 
     public void Init(bool isBot,MotorType playerMotorType)
     {
+        SetRagdollStatus(false);
         MotorModel = transform.GetChild(0).GetChild(0).GetComponent<MotorModelController>();
         MotorRigidbody = transform.GetComponent<Rigidbody>();
         BodyParent = transform.GetChild(0);
@@ -59,6 +63,7 @@ public class MotorBikeControl : MonoBehaviour
         }
         MotorModel.SetSelectedMotor(motorType, !isBot, selectedColor);
 
+        IsMoving = true;
         IsInitilaized = true;
     }
 
@@ -70,7 +75,7 @@ public class MotorBikeControl : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(IsInitilaized)
+        if(IsInitilaized && IsMoving)
         {
             Movement();
         }
@@ -164,4 +169,45 @@ public class MotorBikeControl : MonoBehaviour
     }
     */
 
+    void OnCollisionEnter(Collision collision)
+    {
+
+        if(collision.transform.name.Contains("Car"))
+        {
+            IsMoving = false;
+            MotorModel.SetAnimatorStatus(false);
+            SetRagdollStatus(true);
+            AddRagdollForce(collision.contacts[0].point);
+        }
+
+
+    }
+
+
+    public void SetRagdollStatus(bool status)
+    {
+        foreach(GameObject comps in RagdollComponents)
+        {
+            comps.GetComponent<Collider>().enabled = status;
+            comps.GetComponent<Rigidbody>().isKinematic  = !status;
+
+            if(comps.GetComponent<CharacterJoint>() != null) comps.GetComponent<CharacterJoint>().enableCollision = status;
+            
+            if(status)
+            {
+                comps.GetComponent<Rigidbody>().AddForce(Vector3.up * 8,ForceMode.Impulse);
+            }
+        }
+    }
+
+    void AddRagdollForce(Vector3 contactPoint)
+    {
+        foreach(GameObject comps in RagdollComponents)
+        {
+            comps.GetComponent<Rigidbody>().AddForce((transform.position - contactPoint).normalized * 8,ForceMode.Impulse);
+        }  
+    }
+
 }
+
+

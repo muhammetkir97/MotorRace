@@ -40,7 +40,6 @@ public class CameraFollow : MonoBehaviour
 
         float dir = Mathf.Sign(angle);
         if(angle == 0) dir = 0;
-        Debug.Log(angle);
 
         transform.position = TargetObject.position + Offset + (Vector3.right * angle * -0.005f);
         //transform.position = Vector3.Slerp(transform.position, TargetObject.position + Offset,Time.time * Smooth);

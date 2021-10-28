@@ -69,6 +69,11 @@ public class MotorModelController : MonoBehaviour
         float accel = (acceleration + 1) / 2f;
         AnimatorControl.SetFloat("Acceleration", accel);
     }
+
+    public void SetAnimatorStatus(bool status)
+    {
+        AnimatorControl.enabled = status;
+    }
 }
 
 [System.Serializable]

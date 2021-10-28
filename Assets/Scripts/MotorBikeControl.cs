@@ -28,14 +28,38 @@ public class MotorBikeControl : MonoBehaviour
     private float TargetAngle = 0;
     private float AngleSmoothVel = 0;
 
+    private float CurrentAcceleration = 0;
+    private float TargetAcceleration = 0;
+    private float AccelerationSmoothVel = 0;
+
+    bool IsInitilaized = false;
+
 
     private Rigidbody MotorRigidbody;
     private Transform BodyParent;
+    private MotorModelController MotorModel;
 
     void Start()
     {
+
+    }
+
+    public void Init(bool isBot,MotorType playerMotorType)
+    {
+        MotorModel = transform.GetChild(0).GetChild(0).GetComponent<MotorModelController>();
         MotorRigidbody = transform.GetComponent<Rigidbody>();
         BodyParent = transform.GetChild(0);
+
+        MotorType motorType = playerMotorType;
+        Color selectedColor = Color.red;
+        if(isBot)
+        {
+            motorType = (MotorType)Random.Range(0,Globals.Instance.GetMotorCount()); 
+            selectedColor = new Color(Random.Range(0f,1f),Random.Range(0f,1f),Random.Range(0f,1f));
+        }
+        MotorModel.SetSelectedMotor(motorType, !isBot, selectedColor);
+
+        IsInitilaized = true;
     }
 
     // Update is called once per frame
@@ -46,7 +70,11 @@ public class MotorBikeControl : MonoBehaviour
 
     void FixedUpdate()
     {
-        Movement();
+        if(IsInitilaized)
+        {
+            Movement();
+        }
+        
     }
 
     void Movement()
@@ -54,12 +82,15 @@ public class MotorBikeControl : MonoBehaviour
         CurrentSpeed = Mathf.SmoothDamp(CurrentSpeed, TargetSpeed, ref SpeedSmoothVel, 0.5f);
         CurrentDirection = Mathf.SmoothDamp(CurrentDirection, TargetDirection, ref DirectionSmoothVel, 0.1f);
         CurrentAngle = Mathf.SmoothDamp(CurrentAngle, TargetAngle, ref AngleSmoothVel, 0.2f);
+        CurrentAcceleration = Mathf.SmoothDamp(CurrentAcceleration, TargetAcceleration, ref AccelerationSmoothVel, 0.2f);
 
         MotorRigidbody.AddForce((Vector3.forward * CurrentSpeed * Time.deltaTime) + (Vector3.right * CurrentDirection * Time.deltaTime),ForceMode.Force);
         //MotorRigidbody.velocity = (Vector3.forward * CurrentSpeed * Time.deltaTime) + (Vector3.right * CurrentDirection * Time.deltaTime);
 
-        BodyParent.localRotation = Quaternion.Euler(0, 0, -CurrentAngle * 35);
-
+        BodyParent.localRotation = Quaternion.Euler(0, 0, -CurrentAngle * 15);
+        
+        MotorModel.SetDirection(CurrentAngle);
+        MotorModel.SetAcceleration(CurrentAcceleration);
 
     }
 
@@ -73,8 +104,15 @@ public class MotorBikeControl : MonoBehaviour
         TargetDirection = direction;
 
         TargetAngle = Mathf.Sign(direction);
-        if(direction == 0) TargetAngle = 0;
+        if(direction == 0) TargetAngle = 0;  
     }
+
+    public void SetAcceleration(float newAcceleration)
+    {
+        TargetAcceleration = newAcceleration;
+    }
+
+
 
     public void SetSpeedMultiplier(SpeedMultiplierType multiplier)
     {
@@ -98,6 +136,7 @@ public class MotorBikeControl : MonoBehaviour
         SpeedMultiplier = 1;
     }
 
+    /*
     public void SetSelectedMotorBody(int body)
     {
         int motorCount = BodyParent.childCount - 1;
@@ -114,6 +153,6 @@ public class MotorBikeControl : MonoBehaviour
             }
         }
     }
-
+    */
 
 }

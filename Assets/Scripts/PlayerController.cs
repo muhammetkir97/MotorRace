@@ -6,9 +6,13 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private MotorBikeControl MotorBike;
 
+    float CurrentSpeed = 0;
+    float BaseSpeed = 1000;
+
     void Start()
     {
-        
+        InvokeRepeating("CameraShake",0,0.3f);
+        MotorBike.Init(false,MotorType.Chopper);
     }
 
     // Update is called once per frame
@@ -19,7 +23,17 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        MotorBike.SetSpeed(Input.GetAxisRaw("Vertical") * 1000);
-        MotorBike.SetDirection(Input.GetAxisRaw("Horizontal") * 500);
+        float speedInput = Input.GetAxisRaw("Vertical");
+        float directionInput = Input.GetAxisRaw("Horizontal");
+        CurrentSpeed =  speedInput * BaseSpeed;
+        MotorBike.SetSpeed(CurrentSpeed);
+        MotorBike.SetAcceleration(speedInput);
+        MotorBike.SetDirection(directionInput * 1000);
+    }
+
+    void CameraShake()
+    {
+        float shakeRate = CurrentSpeed / BaseSpeed;
+        iTween.ShakeRotation(Camera.main.gameObject,Random.insideUnitSphere.normalized * (0.2f * shakeRate),0.3f);
     }
 }

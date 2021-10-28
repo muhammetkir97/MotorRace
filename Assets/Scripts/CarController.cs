@@ -31,7 +31,7 @@ public class CarController : MonoBehaviour
     {
         if(IsInit)
         {
-            transform.Translate(Vector3.forward * Direction * CurrentSpeed * Time.deltaTime);
+            transform.Translate(Vector3.forward * Direction * CurrentSpeed * Time.deltaTime,Space.World);
         }
 
     
@@ -46,6 +46,15 @@ public class CarController : MonoBehaviour
         CurrentSpeed = speed;
         DefaultSpeed = speed;
         IsInit = true;
+
+        if(Direction == -1)
+        {
+            transform.rotation = Quaternion.Euler(0,0,0);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0,180,0);
+        }
 
     }
 

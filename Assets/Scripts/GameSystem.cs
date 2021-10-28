@@ -121,10 +121,8 @@ public class GameSystem : MonoBehaviour
             {
                 if(car.transform.position.z < PlayerMotor.transform.position.z - 50)
                 {
-                    Debug.Log("disabled");
                     disableList.Add(car);
                     anyDisable = true;
-
                 }
             }
 

@@ -1,0 +1,196 @@
+fileFormatVersion: 2
+guid: 67512734d90fd754ca402642938fb1c2
+ModelImporter:
+  serializedVersion: 19301
+  internalIDToNameTable:
+  - first:
+      74: 7687450330173088043
+    second: Chopper|MotorDuzGitme
+  - first:
+      74: 7012947046649231572
+    second: Chopper|MotorDuzGitme.005
+  - first:
+      74: -5235557788189432681
+    second: Chopper|MotorDuzGitmeChopper
+  - first:
+      74: 5471813369704130185
+    second: Chopper|MotorDuzGitmeScooter
+  - first:
+      74: -4279161652299927478
+    second: Chopper|MotorDuzGitmeSport
+  - first:
+      74: -5663722221735677860
+    second: Chopper|MotorKalkmaChopper
+  - first:
+      74: 2421848890929295850
+    second: Chopper|MotorKalkmaScooter
+  - first:
+      74: 6878604224312069497
+    second: Chopper|MotorKalkmaSport
+  - first:
+      74: 5277272429165886807
+    second: Scooter|MotorDuzGitme
+  - first:
+      74: 5004262996910520809
+    second: Scooter|MotorDuzGitme.005
+  - first:
+      74: 6042680207280818839
+    second: Scooter|MotorDuzGitmeChopper
+  - first:
+      74: -8225696468873018382
+    second: Scooter|MotorDuzGitmeScooter
+  - first:
+      74: -4344937850137338934
+    second: Scooter|MotorDuzGitmeSport
+  - first:
+      74: 3311918436764279224
+    second: Scooter|MotorKalkmaChopper
+  - first:
+      74: -6622241745743918387
+    second: Scooter|MotorKalkmaScooter
+  - first:
+      74: 1470141416827191871
+    second: Scooter|MotorKalkmaSport
+  - first:
+      74: -4340836120442029588
+    second: Sport|MotorDuzGitme
+  - first:
+      74: 8966621886089864935
+    second: Sport|MotorDuzGitme.005
+  - first:
+      74: 4777068125208590304
+    second: Sport|MotorDuzGitmeChopper
+  - first:
+      74: -8203185495269877544
+    second: Sport|MotorDuzGitmeScooter
+  - first:
+      74: 8889331120256560422
+    second: Sport|MotorDuzGitmeSport
+  - first:
+      74: -7695637404706499039
+    second: Sport|MotorKalkmaChopper
+  - first:
+      74: -1981094141050718525
+    second: Sport|MotorKalkmaScooter
+  - first:
+      74: 7454191956302416763
+    second: Sport|MotorKalkmaSport
+  - first:
+      74: 6251791281177906924
+    second: Motorcu|MotorcuSabitChopper
+  - first:
+      74: -5236306728005782120
+    second: Motorcu|MotorcuSabitScooter
+  - first:
+      74: 4743594567353052328
+    second: Motorcu|MotorcuSabitSport
+  - first:
+      74: -2464327036182273182
+    second: Motorcu|MotorcuSagChopper
+  - first:
+      74: 8297111243879051069
+    second: Motorcu|MotorcuSagScooter
+  - first:
+      74: 6142950936210445660
+    second: Motorcu|MotorcuSagSport.001
+  - first:
+      74: -8991756527099068480
+    second: Motorcu|MotorcuSolChopper
+  - first:
+      74: -8086706004806369863
+    second: Motorcu|MotorcuSolScooter
+  - first:
+      74: -5718987146762089716
+    second: Motorcu|MotorcuSolSport
+  externalObjects: {}
+  materials:
+    materialImportMode: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

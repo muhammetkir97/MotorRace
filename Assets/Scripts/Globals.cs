@@ -10,6 +10,7 @@ public class Globals : MonoBehaviour
     private float CarSpeed = 10;
     private int CarCount = 10;
     private float CarSpacing = 50;
+    private int MotorTypeCount = 3;
 
 
     void Awake()
@@ -46,5 +47,10 @@ public class Globals : MonoBehaviour
     public float GetCarSpacing()
     {
         return CarSpacing;
+    }
+
+    public int GetMotorCount()
+    {
+        return MotorTypeCount;
     }
 }

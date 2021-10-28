@@ -55,7 +55,7 @@ public class BotController : MonoBehaviour
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.left) * 5,Color.green,1);
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.right) * 5,Color.yellow,1);
 
-        Debug.Log($"{forwardDistance} - {leftDistance} - {rightDistance}");
+
   
         if (forwardDistance < 12)
         {

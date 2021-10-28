@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        
         InvokeRepeating("CameraShake",0,0.3f);
         MotorBike.Init(false,MotorType.Chopper);
     }
@@ -34,6 +35,6 @@ public class PlayerController : MonoBehaviour
     void CameraShake()
     {
         float shakeRate = CurrentSpeed / BaseSpeed;
-        iTween.ShakeRotation(Camera.main.gameObject,Random.insideUnitSphere.normalized * (0.2f * shakeRate),0.3f);
+        iTween.ShakeRotation(Camera.main.gameObject,Random.insideUnitSphere.normalized * (0.25f * shakeRate),0.3f);
     }
 }

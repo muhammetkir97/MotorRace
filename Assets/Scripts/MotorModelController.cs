@@ -47,9 +47,9 @@ public class MotorModelController : MonoBehaviour
 
             foreach(Material mat in mats)
             {
-                if(mat.name.Contains("Base"))
+                if(mat.name.Contains("Base") || mat.name.Contains("Body") )
                 {
-                    mat.color = selectedColor;
+                    mat.SetColor("Color_9AA280EA",selectedColor);
                     break;
                 }
             }

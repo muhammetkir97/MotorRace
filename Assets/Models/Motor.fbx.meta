@@ -102,7 +102,42 @@ ModelImporter:
   - first:
       74: -5718987146762089716
     second: Motorcu|MotorcuSolSport
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: AnaRenk
+    second: {fileID: 2100000, guid: 6689d44c6bbcf2a4893852260cfbda4d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Ayakkabi
+    second: {fileID: 2100000, guid: 40de653d44fc1cc46affdf5bae4e97e6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ChopperBase
+    second: {fileID: 2100000, guid: f7348e28abe8dca46a378d25635577d0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cizgiler
+    second: {fileID: 2100000, guid: b401bd6b521d4e143b665d5028403b37, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: 81f85aadbe63dbb43bd2cb69bee04ca7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ScooterBody
+    second: {fileID: 2100000, guid: c6204190123affd408a3c92ceca463ee, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SporBase
+    second: {fileID: 2100000, guid: 37184860fb1a70b4189f112df0c60651, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

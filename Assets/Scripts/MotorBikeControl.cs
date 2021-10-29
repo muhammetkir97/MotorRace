@@ -41,6 +41,7 @@ public class MotorBikeControl : MonoBehaviour
     private MotorModelController MotorModel;
 
     [SerializeField] private GameObject[] RagdollComponents;
+    private List<Vector3> RagdollPositions = new List<Vector3>();
 
     void Start()
     {
@@ -50,6 +51,7 @@ public class MotorBikeControl : MonoBehaviour
     public void Init(bool isBot,MotorType playerMotorType)
     {
         SetRagdollStatus(false);
+        SaveRagdollPosition();
         MotorModel = transform.GetChild(0).GetChild(0).GetComponent<MotorModelController>();
         MotorRigidbody = transform.GetComponent<Rigidbody>();
         BodyParent = transform.GetChild(0);
@@ -104,16 +106,22 @@ public class MotorBikeControl : MonoBehaviour
         TargetSpeed = newSpeed;
     }
 
+
+    float timer = 0;
     public void SetDirection(float direction)
     {
         TargetDirection = direction;
 
         TargetAngle = Mathf.Sign(direction);
-        if(direction == 0)
+        if(Mathf.Abs(direction)  < 0.05f)
         {
+            timer += 0.00015f;
             Vector3 velocity = MotorRigidbody.velocity;
-            float newVelocity = Mathf.Lerp(velocity.x,0,Time.time / 50f);
+            float newVelocity = Mathf.Lerp(velocity.x, 0, timer);
+
             velocity.x = newVelocity;
+
+            if(timer > 1) timer = 0;
 
             MotorRigidbody.velocity = velocity;
             TargetDirection = 0;
@@ -172,15 +180,47 @@ public class MotorBikeControl : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
 
-        if(collision.transform.name.Contains("Car"))
+        if(collision.transform.name.Contains("Car") && IsMoving)
         {
-            IsMoving = false;
-            MotorModel.SetAnimatorStatus(false);
-            SetRagdollStatus(true);
-            AddRagdollForce(collision.contacts[0].point);
+            StartCrash(collision.contacts[0].point);
+        }
+    }
+
+    void StartCrash(Vector3 crashPos)
+    {
+        IsMoving = false;
+        MotorModel.SetAnimatorStatus(false);
+        SetRagdollStatus(true);
+        AddRagdollForce(crashPos);
+        Invoke("ResetCrash",5);
+
+    }
+
+    void ResetCrash()
+    {
+        IsMoving = true;
+        MotorModel.SetAnimatorStatus(true);
+        SetRagdollStatus(false);
+        ResetRagdollPosition();
+
+    }
+
+
+    void SaveRagdollPosition()
+    {
+        for(int i=0; i<RagdollComponents.Length; i++)
+        {
+            RagdollPositions.Add(RagdollComponents[i].transform.position);
         }
 
+    }
 
+    void ResetRagdollPosition()
+    {
+        for(int i=0; i<RagdollComponents.Length; i++)
+        {
+            RagdollComponents[i].transform.position = RagdollPositions[i];
+        }
     }
 
 

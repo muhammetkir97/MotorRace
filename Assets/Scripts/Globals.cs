@@ -12,6 +12,10 @@ public class Globals : MonoBehaviour
     private float CarSpacing = 50;
     private int MotorTypeCount = 3;
 
+    private float ForwardDetectionRange = 25;
+    private float LeftDetectionRange = 3;
+    private float RightDetectionRange = 3;
+
 
     void Awake()
     {
@@ -52,5 +56,20 @@ public class Globals : MonoBehaviour
     public int GetMotorCount()
     {
         return MotorTypeCount;
+    }
+
+    public float GetForwardRange()
+    {
+        return ForwardDetectionRange;
+    }
+
+    public float GetRightRange()
+    {
+        return RightDetectionRange;
+    }
+
+        public float GetLeftRange()
+    {
+        return LeftDetectionRange;
     }
 }

@@ -5,15 +5,19 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private MotorBikeControl MotorBike;
+    [SerializeField] private CameraFollow CameraControl;
 
     float CurrentSpeed = 0;
-    float BaseSpeed = 1000;
+    float BaseSpeed = 2000;
 
     void Start()
     {
         
-        InvokeRepeating("CameraShake",0,0.3f);
+        InvokeRepeating("CameraShake",0,1f);
         MotorBike.Init(false,MotorType.Chopper);
+        MotorBike.CrashStarted += CrashStarted;
+        MotorBike.CrashEnded += CrashEnded;
+        
     }
 
     // Update is called once per frame
@@ -35,6 +39,21 @@ public class PlayerController : MonoBehaviour
     void CameraShake()
     {
         float shakeRate = CurrentSpeed / BaseSpeed;
-        iTween.ShakeRotation(Camera.main.gameObject,Random.insideUnitSphere.normalized * (0.25f * shakeRate),0.3f);
+        //iTween.ShakeRotation(Camera.main.gameObject,Random.insideUnitSphere.normalized * (0.25f * shakeRate),1f);
+    }
+
+    public Vector3 GetMotorPosition()
+    {
+        return MotorBike.GetMotorPosition();
+    }
+
+    void CrashStarted()
+    {
+        CameraControl.SetCrashStatus(true);
+    }
+
+    void CrashEnded()
+    {
+        CameraControl.SetCrashStatus(false);
     }
 }

@@ -7,7 +7,8 @@ public class BotController : MonoBehaviour
     [SerializeField] private MotorBikeControl MotorBike;
 
     float CurrentSpeed = 0;
-    float BaseSpeed = 1000;
+    float BaseSpeed = 0;
+    float BaseDirectionSpeed = 0;
 
     float SpeedInput = 0;
     float DirectionInput = 0;
@@ -18,6 +19,15 @@ public class BotController : MonoBehaviour
 
     void Start()
     {
+        BaseSpeed = Globals.Instance.GetBotSpeed();
+        float speedChangeRatio = Globals.Instance.GetBotSpeedRatio();
+
+        float minSpeed = BaseSpeed * (1 - (speedChangeRatio-1));
+        float maxSpeed = BaseSpeed * speedChangeRatio;
+        BaseSpeed = Random.Range(minSpeed,maxSpeed);
+
+        BaseDirectionSpeed = Globals.Instance.GetBotDirectionSpeed();
+
         ForwardDetectionRange = Globals.Instance.GetForwardRange();
         LeftDetectionRange = Globals.Instance.GetLeftRange();
         RightDetectionRange = Globals.Instance.GetRightRange();
@@ -46,8 +56,10 @@ public class BotController : MonoBehaviour
         RaycastHit rightHit;
         bool isRightHit = false;
 
-        bool forwardHit1 = Physics.Raycast(transform.position + transform.TransformDirection(Vector3.right) * 0.3f, transform.TransformDirection(Vector3.forward), out tmpHit1, ForwardDetectionRange);
-        bool forwardHit2 = Physics.Raycast(transform.position + transform.TransformDirection(Vector3.left) * 0.3f, transform.TransformDirection(Vector3.forward), out tmpHit2, ForwardDetectionRange);
+        float detectionLength = Globals.Instance.GetForwardDetectionLength();
+
+        bool forwardHit1 = Physics.Raycast(transform.position + transform.TransformDirection(Vector3.right) * detectionLength, transform.TransformDirection(Vector3.forward), out tmpHit1, ForwardDetectionRange);
+        bool forwardHit2 = Physics.Raycast(transform.position + transform.TransformDirection(Vector3.left) * detectionLength, transform.TransformDirection(Vector3.forward), out tmpHit2, ForwardDetectionRange);
 
 
         if(forwardHit1 || forwardHit2)
@@ -87,7 +99,8 @@ public class BotController : MonoBehaviour
         float rightDistance = rightHit.distance;
         if(!isRightHit) rightDistance = RightDetectionRange;
 
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * ForwardDetectionRange,Color.red,1);
+        Debug.DrawRay(transform.position + transform.TransformDirection(Vector3.right) * detectionLength, transform.TransformDirection(Vector3.forward) * ForwardDetectionRange,Color.red,1);
+        Debug.DrawRay(transform.position + transform.TransformDirection(Vector3.left) * detectionLength, transform.TransformDirection(Vector3.forward) * ForwardDetectionRange,Color.red,1);
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.left) * LeftDetectionRange,Color.green,1);
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.right) * RightDetectionRange,Color.yellow,1);
 
@@ -134,7 +147,7 @@ public class BotController : MonoBehaviour
         CurrentSpeed =  SpeedInput * BaseSpeed;
         MotorBike.SetSpeed(CurrentSpeed);
         MotorBike.SetAcceleration(SpeedInput);
-        MotorBike.SetDirection(DirectionInput * 1500);
+        MotorBike.SetDirection(DirectionInput * BaseDirectionSpeed);
     }
 
     // Update is called once per frame

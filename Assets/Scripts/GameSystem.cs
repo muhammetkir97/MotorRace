@@ -10,6 +10,11 @@ public class GameSystem : MonoBehaviour
     private int LaneCount;
     [SerializeField] private PoolController CarPool;
     [SerializeField] private PlayerController PlayerMotor;
+    [SerializeField] private PoolController Road1Pool;
+    [SerializeField] private PoolController Tunnel1Pool;
+    [SerializeField] private Transform BotMotorParent;
+    List<GameObject> RoadObjects = new List<GameObject>();
+
 
     List<CarController> ActiveCars = new List<CarController>(); 
 
@@ -21,6 +26,7 @@ public class GameSystem : MonoBehaviour
         Instance = this;
         InvokeRepeating("ControlCars", 0,0.5f);
         InvokeRepeating("CreateTraffic", 0,0.5f);
+        InvokeRepeating("CreateMap", 0,0.3f);
     }
 
 
@@ -33,6 +39,97 @@ public class GameSystem : MonoBehaviour
     void Update()
     {
         
+    }
+
+
+    int RoadCount = 0;
+    int TunnelEndCount = 0;
+    bool IsFirstMap = true;
+    void CreateMap()
+    {
+        bool isRoadChanged = true;
+
+        while(isRoadChanged)
+        {   
+            isRoadChanged = false;
+
+            float pos = PlayerMotor.GetMotorPosition().z;
+
+            int roadCount = 0;
+            float minBlockPos = 99999999;
+            int minBlockIndex = 0;
+
+            float maxBlockPos = -9999999;
+            int maxBlockIndex = 0;
+
+            for(int i=0; i<RoadObjects.Count; i++)
+            {
+                roadCount++;
+                float roadPos = RoadObjects[i].transform.position.z;
+
+                if(roadPos < minBlockPos)
+                {
+                    minBlockIndex = i;
+                    minBlockPos = roadPos;
+                }
+                else if(roadPos > maxBlockPos)
+                {
+                    maxBlockIndex = i;
+                    maxBlockPos = roadPos;
+                }
+            }
+
+            if(IsFirstMap || roadCount > 0)
+            {
+                if(pos - minBlockPos > Globals.Instance.GetBackRoadLimit())
+                {
+                    Vector3 newRoadPos = new Vector3(-99,-99,-99);
+
+                    if(RoadObjects[minBlockIndex].name.Contains("Road"))
+                    {
+                        Road1Pool.AddToPool(RoadObjects[minBlockIndex]);
+                    }
+                    else if(RoadObjects[minBlockIndex].name.Contains("Tunnel"))
+                    {
+                        Tunnel1Pool.AddToPool(RoadObjects[minBlockIndex]);
+                    }
+                    
+                    RoadObjects.Remove(RoadObjects[minBlockIndex]);
+                    isRoadChanged = true;
+                    
+                }
+
+                if(maxBlockPos - pos < Globals.Instance.GetForwardRoadLimit())
+                {
+                    GameObject roadObject;
+                    if(RoadCount < TunnelEndCount)
+                    {
+                        roadObject = Tunnel1Pool.GetFromPool();
+                    }
+                    else
+                    {
+                        roadObject = Road1Pool.GetFromPool();
+
+                        if(RoadCount - TunnelEndCount > 8)
+                        {
+                            TunnelEndCount = RoadCount + 5;
+                        }
+                    }
+                    Vector3 newRoadPos = new Vector3(0,0,RoadCount * 60);
+                    roadObject.transform.position = newRoadPos;
+                    RoadObjects.Add(roadObject);
+                    RoadCount++;
+                    isRoadChanged = true;
+                    
+                }
+            }
+
+        }
+
+
+
+        IsFirstMap = false;
+
     }
 
 
@@ -157,5 +254,25 @@ public class GameSystem : MonoBehaviour
     public Vector3 GetPlayerPosition()
     {
         return PlayerMotor.transform.position;
+    }
+
+    public int GetMotorOrder(float motorPos)
+    {
+        List<float> motorPositions = new List<float>();
+        int order = 1;
+
+        foreach(Transform m in BotMotorParent)
+        {
+            motorPositions.Add(m.transform.position.z);
+        }
+        motorPositions.Add(PlayerMotor.transform.position.z);
+
+        foreach(float pos in motorPositions)
+        {
+            if(motorPos < pos) order++;
+        }
+
+        return order;
+
     }
 }

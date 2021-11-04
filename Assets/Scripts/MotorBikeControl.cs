@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 
 
@@ -13,7 +14,7 @@ public class MotorBikeControl : MonoBehaviour
         Near,
         Boost
     }
-
+    private float DirectionSpeed = 1;
     private float SpeedMultiplier = 1;
 
     private float CurrentSpeed = 0;
@@ -34,6 +35,7 @@ public class MotorBikeControl : MonoBehaviour
 
     bool IsInitilaized = false;
     bool IsMoving = false;
+    private bool IsBot = false;
 
 
     private Rigidbody MotorRigidbody;
@@ -42,6 +44,13 @@ public class MotorBikeControl : MonoBehaviour
 
     [SerializeField] private GameObject[] RagdollComponents;
     private List<Vector3> RagdollPositions = new List<Vector3>();
+    [SerializeField] private Transform BotInfo;
+    [SerializeField] private BotInfoControl BotInfoController;
+
+    private Vector3 MotorPosition;
+
+    public UnityAction CrashStarted;
+    public UnityAction CrashEnded;
 
     void Start()
     {
@@ -50,6 +59,8 @@ public class MotorBikeControl : MonoBehaviour
 
     public void Init(bool isBot,MotorType playerMotorType)
     {
+        IsBot = isBot;
+        DirectionSpeed = Globals.Instance.GetCarDirectionSpeed();
         SetRagdollStatus(false);
         SaveRagdollPosition();
         MotorModel = transform.GetChild(0).GetChild(0).GetComponent<MotorModelController>();
@@ -79,7 +90,13 @@ public class MotorBikeControl : MonoBehaviour
     {
         if(IsInitilaized && IsMoving)
         {
+            MotorPosition = transform.position;
             Movement();
+            if(IsBot)
+            {
+                BotInfo.position = MotorPosition;
+                BotInfoController.SetBotOrder(GameSystem.Instance.GetMotorOrder(MotorPosition.z).ToString());
+            }
         }
         
     }
@@ -91,7 +108,7 @@ public class MotorBikeControl : MonoBehaviour
         CurrentAngle = Mathf.SmoothDamp(CurrentAngle, TargetAngle, ref AngleSmoothVel, 0.5f);
         CurrentAcceleration = Mathf.SmoothDamp(CurrentAcceleration, TargetAcceleration, ref AccelerationSmoothVel, 0.2f);
 
-        MotorRigidbody.AddForce((Vector3.forward * CurrentSpeed * Time.deltaTime) + (Vector3.right * CurrentDirection * Time.deltaTime),ForceMode.Force);
+        MotorRigidbody.AddForce((Vector3.forward * CurrentSpeed * Time.deltaTime) + (Vector3.right * CurrentDirection * DirectionSpeed * Time.deltaTime),ForceMode.Force);
         //MotorRigidbody.velocity = (Vector3.forward * CurrentSpeed * Time.deltaTime) + (Vector3.right * CurrentDirection * Time.deltaTime);
 
         BodyParent.localRotation = Quaternion.Euler(0, 0, -CurrentAngle * 12);
@@ -188,21 +205,27 @@ public class MotorBikeControl : MonoBehaviour
 
     void StartCrash(Vector3 crashPos)
     {
+        if(CrashStarted != null) CrashStarted();
         IsMoving = false;
         MotorModel.SetAnimatorStatus(false);
+
         SetRagdollStatus(true);
         AddRagdollForce(crashPos);
+
+        if(!IsBot) MotorModel.SetHandBodyStatus(false);
         Invoke("ResetCrash",5);
 
     }
 
     void ResetCrash()
     {
+        
         IsMoving = true;
         MotorModel.SetAnimatorStatus(true);
         SetRagdollStatus(false);
         ResetRagdollPosition();
-
+        if(!IsBot) MotorModel.SetHandBodyStatus(true);
+        if(CrashStarted != null) CrashEnded();
     }
 
 
@@ -247,6 +270,13 @@ public class MotorBikeControl : MonoBehaviour
             comps.GetComponent<Rigidbody>().AddForce((transform.position - contactPoint).normalized * 8,ForceMode.Impulse);
         }  
     }
+
+    public Vector3 GetMotorPosition()
+    {
+        return MotorPosition;
+    }
+
+    
 
 }
 

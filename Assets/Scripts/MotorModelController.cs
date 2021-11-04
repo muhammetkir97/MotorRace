@@ -15,6 +15,7 @@ public class MotorModelController : MonoBehaviour
     [SerializeField] private GameObject DriverBody;
     [SerializeField] private MotorProperties[] MotorValues;
     [SerializeField] private MeshRenderer[] MotorBodyMaterials;
+    private MotorType SelectedMotorType;
 
 
     void Start()
@@ -30,16 +31,11 @@ public class MotorModelController : MonoBehaviour
 
     public void SetSelectedMotor(MotorType motorType, bool isPlayer, Color selectedColor)
     {
-        DriverBody.SetActive(!isPlayer);
+        SelectedMotorType = motorType;
+        
         AnimatorControl.SetFloat("MotorType", (float)motorType);
-        for(int i=0; i<MotorValues.Length; i++)
-        {
-            bool isActive = i == (int)motorType;
 
-            MotorValues[i].MotorObject.SetActive(isActive);
-            MotorValues[i].MotorHand.SetActive(isActive && isPlayer);
-        }
-
+        SetHandBodyStatus(isPlayer);
         foreach(MeshRenderer renderer in MotorBodyMaterials)
         {
             List<Material> mats = new List<Material>();
@@ -52,9 +48,20 @@ public class MotorModelController : MonoBehaviour
                     mat.SetColor("Color_9AA280EA",selectedColor);
                     break;
                 }
-            }
+            } 
+        }
+    }
 
-            
+    public void SetHandBodyStatus(bool status)
+    {
+        DriverBody.SetActive(!status);
+
+        for(int i=0; i<MotorValues.Length; i++)
+        {
+            bool isActive = i == (int)SelectedMotorType;
+
+            MotorValues[i].MotorObject.SetActive(isActive);
+            MotorValues[i].MotorHand.SetActive(isActive && status);
         }
     }
 
